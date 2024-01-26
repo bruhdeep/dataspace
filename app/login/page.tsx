@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Login() {
   return (
@@ -6,10 +7,12 @@ export default function Login() {
       <div className="w-full max-w-[90%] md:max-w-[60%] lg:max-w-[40%] xl:max-w-[30%] h-auto md:h-[80%] my-9 rounded-xl bg-white bg-opacity-75">
         <div className="w-[90%] md:w-[80%] lg:w-[90%] mx-auto h-full px-14 py-3 flex flex-col justify-between">
           <div className="h-[20%] my-10">
-            <img
+            <Image
               src="/dataspacelogo.png"
               alt="dataspace"
-              className="m-auto w-[65%] pt-5"
+              className="m-auto pt-5"
+              width={250}
+              height={200}
             />
           </div>
           <div className="h-[10%] mb-5">
