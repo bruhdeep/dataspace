@@ -1,7 +1,16 @@
+"use client";
+
 import Link from "next/link";
+<<<<<<< Updated upstream
 import Image from "next/image";
+=======
+import { useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+>>>>>>> Stashed changes
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-[url('https://ewm.swiss/application/files/5716/0379/3279/social_media_.jpg')] bg-cover">
       <div className="w-full max-w-[90%] md:max-w-[60%] lg:max-w-[40%] xl:max-w-[30%] h-auto md:h-[80%] my-9 rounded-xl bg-white bg-opacity-75">
@@ -32,6 +41,7 @@ export default function Login() {
               </div>
 
               <div>
+<<<<<<< Updated upstream
                 <input
                   id="password"
                   name="password"
@@ -39,11 +49,31 @@ export default function Login() {
                   className="w-full h-20 px-7 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-xl"
                   required
                 />
+=======
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    placeholder="Password"
+                    className="w-full h-20 px-7 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-xl pr-10"
+                    required
+                  />
+                  <i
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute top-1/2 right-3 transform -translate-y-1/2 pr-2"
+                  >
+                    {showPassword ? (
+                      <AiOutlineEye size={30} />
+                    ) : (
+                      <AiOutlineEyeInvisible size={30} />
+                    )}
+                  </i>
+                </div>
+>>>>>>> Stashed changes
                 <div className="flex float-right">
                   <Link href="/">
-                    <p className="text-[#6CA2F3] pt-2 mb-8">
-                      Forgot Password?
-                    </p>
+                    <p className="text-[#6CA2F3] pt-2 mb-8">Forgot Password?</p>
                   </Link>
                 </div>
               </div>
