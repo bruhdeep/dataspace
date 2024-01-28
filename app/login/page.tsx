@@ -1,12 +1,9 @@
 "use client";
 
 import Link from "next/link";
-<<<<<<< Updated upstream
 import Image from "next/image";
-=======
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
->>>>>>> Stashed changes
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,15 +38,6 @@ export default function Login() {
               </div>
 
               <div>
-<<<<<<< Updated upstream
-                <input
-                  id="password"
-                  name="password"
-                  placeholder="Password"
-                  className="w-full h-20 px-7 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-xl"
-                  required
-                />
-=======
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -70,14 +58,12 @@ export default function Login() {
                     )}
                   </i>
                 </div>
->>>>>>> Stashed changes
                 <div className="flex float-right">
                   <Link href="/">
                     <p className="text-[#6CA2F3] pt-2 mb-8">Forgot Password?</p>
                   </Link>
                 </div>
               </div>
-
               <button
                 type="submit"
                 className="w-full h-20 text-2xl font-semibold bg-[#0D5077] text-white px-4 py-2 rounded-2xl hover:bg-blue-600 duration-200   focus:outline-none focus:bg-blue-600"
