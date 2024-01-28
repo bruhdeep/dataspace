@@ -9,10 +9,10 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[url('https://ewm.swiss/application/files/5716/0379/3279/social_media_.jpg')] bg-cover">
+    <div className="flex items-center justify-center min-h-screen bg-[url('/BACKGROUND.png')] bg-cover">
       <div className="w-full max-w-[90%] md:max-w-[60%] lg:max-w-[40%] xl:max-w-[30%] h-auto md:h-[80%] my-9 rounded-xl bg-white bg-opacity-75">
         <div className="w-[90%] md:w-[80%] lg:w-[90%] mx-auto h-full px-14 py-3 flex flex-col justify-between">
-          <div className="h-[20%] my-10">
+          <div className="h-[20%] my-5">
             <Image
               src="/dataspacelogo.png"
               alt="dataspace"
@@ -22,7 +22,7 @@ export default function Login() {
             />
           </div>
           <div className="h-[10%] mb-5">
-            <p className="text-4xl font-extrabold">LOGIN</p>
+            <p className="text-3xl font-semibold">LOGIN</p>
           </div>
           <div className="h-[60%]">
             <form className="flex flex-col space-y-10">
@@ -52,15 +52,15 @@ export default function Login() {
                     className="absolute top-1/2 right-3 transform -translate-y-1/2 pr-2"
                   >
                     {showPassword ? (
-                      <AiOutlineEye size={30} />
+                      <AiOutlineEye size={30} color="gray" />
                     ) : (
-                      <AiOutlineEyeInvisible size={30} />
+                      <AiOutlineEyeInvisible size={30} color="gray" />
                     )}
                   </i>
                 </div>
                 <div className="flex float-right">
                   <Link href="/">
-                    <p className="text-[#6CA2F3] pt-2 mb-8">Forgot Password?</p>
+                    <p className="text-[#6CA2F3] pt-2">Forgot Password?</p>
                   </Link>
                 </div>
               </div>
@@ -72,7 +72,7 @@ export default function Login() {
               </button>
             </form>
           </div>
-          <div className="mt-14 mb-5 h-[10%] text-center font-extrabold text-lg">
+          <div className="mt-5 mb-5 h-[10%] text-center text-lg">
             Not registered yet?{" "}
             <Link href="/register">
               <span className="text-[#6CA2F3] cursor-pointer font-medium">
