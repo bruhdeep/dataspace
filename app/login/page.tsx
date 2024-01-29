@@ -16,7 +16,7 @@ export default function Login() {
             <Image
               src="/dataspacelogo.png"
               alt="dataspace"
-              className="m-auto p-5"
+              className="m-auto pt-5"
               width={250}
               height={200}
             />

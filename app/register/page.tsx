@@ -1,6 +1,24 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
+
+import {
+  generatePassword,
+  copyToClipboard,
+} from "../../utils/passwordGenerator";
 
 export default function Register() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  function handleGeneratePassword() {
+    const generatedPassword = generatePassword(10); // Change 10 to your desired password length
+    setPassword(generatedPassword);
+    setConfirmPassword(generatedPassword);
+    copyToClipboard(generatedPassword);
+  }
+
   return (
     <div className="flex">
       <div className="flex w-[30%] max-h-fit bg-[url('/BACKGROUND.png')] bg-cover">
@@ -147,30 +165,36 @@ export default function Register() {
           <div className="border-b-2">
             <h2 className="text-xl font-regular">Account Security</h2>
           </div>
-          <div className="flex gap-32 my-3">
-            <div className="flex flex-col py-2 w-full">
-              <label>Password</label>
-              <input
-                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
-                type="password"
-                required
-              />
 
-              <button
-                type="submit"
-                className="w-[50%] h-10 text-1xl bg-[#337AB7] text-white py-2 rounded-md hover:bg-blue-600 duration-200 mt-5 drop-shadow-xl"
-              >
-                Generate Password
-              </button>
-            </div>
+          <div>
+            <div className="flex gap-32 my-3">
+              <div className="flex flex-col py-2 w-full">
+                <label>Password</label>
+                <input
+                  className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
+                  type="password"
+                  value={password}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={handleGeneratePassword}
+                  className="w-[50%] h-10 text-1xl bg-[#337AB7] text-white py-2 rounded-md hover:bg-blue-600 duration-200 mt-5 drop-shadow-xl"
+                >
+                  Generate Password and copy
+                </button>
+              </div>
 
-            <div className="flex flex-col py-2 w-full">
-              <label>Confirm Password</label>
-              <input
-                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
-                type="password"
-                required
-              />
+              <div className="flex flex-col py-2 w-full">
+                <label>Confirm Password</label>
+                <input
+                  className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </div>
             </div>
           </div>
 
