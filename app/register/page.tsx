@@ -14,6 +14,7 @@ import Link from "next/link";
 export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isCaptchaFilled, setIsCaptchaFilled] = useState(false);
 
   function handleGeneratePassword() {
     const generatedPassword = generatePassword(12); // Change 10 to your desired password length
@@ -32,7 +33,13 @@ export default function Register() {
     setConfirmPassword(event.target.value);
   }
 
-  const onChange = () => {};
+  const onChange = (value: string | null) => {
+    if (value !== null) {
+      setIsCaptchaFilled(true);
+    } else {
+      setIsCaptchaFilled(false);
+    }
+  };
 
   return (
     <div className="flex">
@@ -233,6 +240,7 @@ export default function Register() {
               <Link href="/">
                 <button
                   type="submit"
+                  disabled={!isCaptchaFilled}
                   className="border-2 py-2 px-5 rounded-md bg-[#337AB7] text-white hover:bg-blue-600 duration-200"
                 >
                   Register
