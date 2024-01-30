@@ -7,13 +7,14 @@ import {
   generatePassword,
   copyToClipboard,
 } from "../../utils/passwordGenerator";
+import PasswordStrengthBar from "react-password-strength-bar";
 
 export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   function handleGeneratePassword() {
-    const generatedPassword = generatePassword(10); // Change 10 to your desired password length
+    const generatedPassword = generatePassword(12); // Change 10 to your desired password length
     setPassword(generatedPassword);
     setConfirmPassword(generatedPassword);
     copyToClipboard(generatedPassword);
@@ -29,7 +30,7 @@ export default function Register() {
 
   return (
     <div className="flex">
-      <div className="flex w-[30%] max-h-fit bg-[url('/BACKGROUND.png')] bg-cover">
+      <div className="flex w-[0%] lg:w-[30%] md:w-[30%] max-h-fit bg-[url('/BACKGROUND.png')] bg-cover">
         <div className="h-[20%] mx-auto">
           <Image
             className="mt-20"
@@ -180,11 +181,13 @@ export default function Register() {
                 <label>Password</label>
                 <input
                   className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
-                  type="password"
+                  type="text"
                   value={password}
                   onChange={handleChangePassword}
                   required
                 />
+                <PasswordStrengthBar password={password} className="pr-2 pt-1 font-semibold"/>
+                
                 <button
                   type="button"
                   onClick={handleGeneratePassword}
@@ -198,7 +201,7 @@ export default function Register() {
                 <label>Confirm Password</label>
                 <input
                   className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
-                  type="password"
+                  type="text"
                   value={confirmPassword}
                   onChange={handleChangeConfirmPassword}
                   required
