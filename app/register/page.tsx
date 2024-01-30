@@ -19,6 +19,14 @@ export default function Register() {
     copyToClipboard(generatedPassword);
   }
 
+  function handleChangePassword(event: React.ChangeEvent<HTMLInputElement>) {
+    setPassword(event.target.value);
+  }
+
+  function handleChangeConfirmPassword(event: React.ChangeEvent<HTMLInputElement>) {
+    setConfirmPassword(event.target.value);
+  }
+
   return (
     <div className="flex">
       <div className="flex w-[30%] max-h-fit bg-[url('/BACKGROUND.png')] bg-cover">
@@ -174,8 +182,16 @@ export default function Register() {
                   className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
                   type="password"
                   value={password}
+                  onChange={handleChangePassword}
                   required
                 />
+                <button
+                  type="button"
+                  onClick={handleGeneratePassword}
+                  className="w-[50%] h-10 text-1xl bg-[#337AB7] text-white py-2 rounded-md hover:bg-blue-600 duration-200 mt-5 drop-shadow-xl"
+                >
+                  Generate Password
+                </button>
               </div>
 
               <div className="flex flex-col py-2 w-full">
@@ -184,18 +200,11 @@ export default function Register() {
                   className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
                   type="password"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={handleChangeConfirmPassword}
                   required
                 />
               </div>
             </div>
-            <button
-              type="button"
-              onClick={handleGeneratePassword}
-              className="text-1xl px-5 py-2 bg-[#337AB7] text-white rounded-md hover:bg-blue-600 duration-200 mt-5 drop-shadow-xl"
-            >
-              Generate Password and copy
-            </button>
           </div>
 
           {/* Register Button */}
