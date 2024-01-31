@@ -234,6 +234,8 @@ export default function Register() {
             </div>
           </div>
 
+          {/* Custom Fields */}
+
           {/* Account Security Section*/}
           <div className="border-b-2">
             <h2 className="text-xl font-regular">Account Security</h2>
@@ -288,15 +290,23 @@ export default function Register() {
 
             {/* Register Button */}
             <div className="flex float-right">
-              <Link href="/">
-                <button
-                  type="submit"
-                  disabled={!isCaptchaFilled}
-                  className="border-2 py-2 px-5 rounded-md bg-[#337AB7] text-white hover:bg-blue-600 duration-200"
+              {!isCaptchaFilled ? (
+                <div
+                  onClick={() => alert("Please fill the CAPTCHA!")}
+                  className="border-2 py-2 px-5 rounded-md bg-[#337AB7] text-white hover:bg-blue-600 duration-200 cursor-pointer"
                 >
                   Register
-                </button>
-              </Link>
+                </div>
+              ) : (
+                <Link href="/">
+                  <button
+                    type="submit"
+                    className="border-2 py-2 px-5 rounded-md bg-[#337AB7] text-white hover:bg-blue-600 duration-200"
+                  >
+                    Register
+                  </button>
+                </Link>
+              )}
             </div>
           </div>
         </div>
