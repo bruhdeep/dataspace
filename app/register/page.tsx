@@ -50,8 +50,6 @@ export default function Register() {
     }
   };
 
-  // Captcha Validation messsage
-
   // Validation
   useEffect(() => {
     const validateEmailAsync = async () => {
@@ -80,7 +78,7 @@ export default function Register() {
       validateEmailAsync();
     }, 3000); // Adjust the debounce delay as needed (e.g., 500 milliseconds)
 
-    // Clear the timer on component unmount or when the email changes
+    // Clear the timer on component when the email changes
     return () => clearTimeout(debounceTimer);
   }, [email]);
 
