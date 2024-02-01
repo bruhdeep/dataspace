@@ -3,6 +3,9 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import countryData from "country-codes-list";
+
+import InputField from "@/components/inputfield";
 
 import {
   generatePassword,
@@ -11,7 +14,7 @@ import {
 import PasswordStrengthBar from "react-password-strength-bar";
 import Link from "next/link";
 
-import { validateEmail } from "@/utils/emailValidate";
+import { validateEmail } from "@/utils/tempEmailDetect";
 
 export default function Register() {
   const [password, setPassword] = useState("");
@@ -20,9 +23,12 @@ export default function Register() {
 
   // Email Validation
   const [email, setEmail] = useState("");
-  const [isValidEmail, setIsValidEmail] = useState(true);
+  const [isValidEmail, setIsValidEmail] = useState(false);
   const [isTempEmail, setIsTempEmail] = useState(false);
 
+  // Country Code
+  // const country
+ 
   // Genrate Password
   function handleGeneratePassword() {
     const generatedPassword = generatePassword(12); // Change 10 to your desired password length
@@ -41,6 +47,12 @@ export default function Register() {
     setConfirmPassword(event.target.value);
   }
 
+  //Email format validation function
+  function isValidEmailFormat(email: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
   // Captcha
   const onChange = (value: string | null) => {
     if (value !== null) {
@@ -50,37 +62,48 @@ export default function Register() {
     }
   };
 
-  // Validation
-  useEffect(() => {
-    const validateEmailAsync = async () => {
-      try {
-        const { isValid, isTemp } = await validateEmail(email);
-        console.log("Email validation result:", { isValid, isTemp });
+  // Temp Email Detection
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
 
-        // Additional logging for debugging
-        console.log("Email validation API response:", { isValid, isTemp });
+  const handleEmailBlur = async () => {
+    try {
+      const { isTemp } = await validateEmail(email);
+      console.log("Email validation result:", { isTemp });
 
-        setIsValidEmail(isValid);
-        setIsTempEmail(isTemp);
-      } catch (error) {
-        console.error("Error during email validation:", error);
+      // Additional logging for debugging
+      console.log("Email validation API response:", { isTemp });
 
-        // Additional logging for debugging
-        console.error("Email validation error:", error);
+      const isValidFormat = isValidEmailFormat(email);
 
-        setIsValidEmail(false);
-        setIsTempEmail(false);
+      // Update state based on the result of email validation
+      setIsTempEmail(typeof isTemp === "boolean" ? isTemp : isTemp === "true");
+      setIsValidEmail(isValidFormat);
+
+      // Log the validation results to the console
+      console.log("Email format is valid:", isValidFormat);
+      console.log("Is temp email:", isTemp);
+
+      if (!isValidFormat) {
+        console.log("Invalid email format!");
       }
-    };
 
-    // Debounce the email validation to avoid frequent calls during typing
-    const debounceTimer = setTimeout(() => {
-      validateEmailAsync();
-    }, 3000); // Adjust the debounce delay as needed (e.g., 500 milliseconds)
+      // You can directly show a message for temporary emails here
+      if (isTemp === true) {
+        console.log("Temp Email detected!");
+      }
+    } catch (error) {
+      console.error("Error during email validation:", error);
 
-    // Clear the timer on component when the email changes
-    return () => clearTimeout(debounceTimer);
-  }, [email]);
+      // Additional logging for debugging
+      console.error("Email validation error:", error);
+
+      // Handle errors by updating state accordingly
+      setIsTempEmail(false);
+      setIsValidEmail(false);
+    }
+  };
 
   return (
     <div className="flex">
@@ -91,7 +114,7 @@ export default function Register() {
             src="/dataspacelogo.png"
             alt="dataspace"
             width={250}
-            height={200}
+            height={250}
           />
         </div>
       </div>
@@ -108,40 +131,27 @@ export default function Register() {
             </h2>
           </div>
           <div className="flex my-3 justify-between">
-            <div className="flex flex-col py-2 w-[40%]">
-              <label>First Name</label>
-              <input
-                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
-                type="text"
-                required
-              />
-            </div>
-            <div className="flex flex-col py-2 w-[40%]">
-              <label>Last Name</label>
-              <input
-                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
-                type="text"
-                required
-              />
-            </div>
+            <InputField label="First Name" type="text" />
+
+            <InputField label="Last Name" type="text" />
           </div>
           <div className="flex justify-between pb-5">
             <div className="flex flex-col w-[40%]">
               <label>Email</label>
               <input
-                className={`border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md ${
-                  email && !isValidEmail ? "border-red-500" : "border-gray-300"
+                className={`border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md 
                 }`}
                 type="email"
                 required
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmailChange}
+                onBlur={handleEmailBlur}
               />
-              {email && !isValidEmail && (
-                <p className="text-red-500 items-center pt-2">Invalid Email</p>
-              )}
-              {email && isTempEmail && (
-                <p className="text-red-500">Temporary email detected</p>
-              )}
+              {isTempEmail ? (
+                <p className="text-red-500 py-1">Disposable Email Detected!</p>
+              ) : null}
+              {email && !isValidEmail ? (
+                <p className="text-red-500 py-1">Invalid Email Format!</p>
+              ) : null}
             </div>
             <div className="flex flex-col w-[40%]">
               <label>Phone number</label>
