@@ -1,9 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import countryData from "country-codes-list";
+
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
+import { parsePhoneNumberFromString, AsYouType } from "libphonenumber-js";
 
 import InputField from "@/components/inputfield";
 
@@ -15,6 +19,7 @@ import PasswordStrengthBar from "react-password-strength-bar";
 import Link from "next/link";
 
 import { validateEmail } from "@/utils/tempEmailDetect";
+import { kMaxLength } from "buffer";
 
 export default function Register() {
   const [password, setPassword] = useState("");
@@ -27,8 +32,31 @@ export default function Register() {
   const [isTempEmail, setIsTempEmail] = useState(false);
 
   // Country Code
-  // const country
- 
+  const [PhoneNumber, setPhoneNumber] = useState("");
+  const [valid, setValid] = useState(true);
+
+  const handlePhoneChange = (
+    value: string,
+    country: any,
+    event: React.ChangeEvent<HTMLInputElement>,
+    formattedValue: string
+  ) => {
+    // Format the phone number as the user types
+    const phoneNumber = new AsYouType(country).input(value);
+
+    // Parse the phone number
+    const parsedPhoneNumber = parsePhoneNumberFromString(phoneNumber, country);
+
+    // Check if the phone number is valid
+    if (parsedPhoneNumber?.isValid()) {
+      setPhoneNumber(phoneNumber);
+      setValid(true);
+    } else {
+      setValid(false);
+      // handle invalid phone number
+    }
+  };
+
   // Genrate Password
   function handleGeneratePassword() {
     const generatedPassword = generatePassword(12); // Change 10 to your desired password length
@@ -52,15 +80,6 @@ export default function Register() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
-
-  // Captcha
-  const onChange = (value: string | null) => {
-    if (value !== null) {
-      setIsCaptchaFilled(true);
-    } else {
-      setIsCaptchaFilled(false);
-    }
-  };
 
   // Temp Email Detection
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,6 +121,15 @@ export default function Register() {
       // Handle errors by updating state accordingly
       setIsTempEmail(false);
       setIsValidEmail(false);
+    }
+  };
+
+  // Captcha
+  const onChange = (value: string | null) => {
+    if (value !== null) {
+      setIsCaptchaFilled(true);
+    } else {
+      setIsCaptchaFilled(false);
     }
   };
 
@@ -155,11 +183,24 @@ export default function Register() {
             </div>
             <div className="flex flex-col w-[40%]">
               <label>Phone number</label>
-              <input
-                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
-                type="tel"
-                required
+              <PhoneInput
+                value={PhoneNumber}
+                onChange={handlePhoneChange}
+                inputStyle={{
+                  border: "1px solid rgba(128, 128, 128, 0.31)",
+                  borderRadius: "0.25rem",
+                  padding: "0.268rem 2.7rem", // Adjust the percentage for responsiveness
+                  width: "98%", // Make the input take full width
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.15)",
+                }}
               />
+
+              {!valid && (
+                <p className="text-red-500 py-1">
+                  {" "}
+                  Please enter valid phone number!
+                </p>
+              )}
             </div>
           </div>
 
