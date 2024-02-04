@@ -7,6 +7,8 @@ import ReCAPTCHA from "react-google-recaptcha";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+
 import { parsePhoneNumberFromString, AsYouType } from "libphonenumber-js";
 
 import InputField from "@/components/inputfield";
@@ -19,17 +21,21 @@ import PasswordStrengthBar from "react-password-strength-bar";
 import Link from "next/link";
 
 import { validateEmail } from "@/utils/tempEmailDetect";
-import { kMaxLength } from "buffer";
+import { PasswordCriteria } from "@/utils/passwordCriteria";
 
 export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+
   const [isCaptchaFilled, setIsCaptchaFilled] = useState(false);
 
   // Email Validation
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isTempEmail, setIsTempEmail] = useState(false);
+  const [DisplayInvalid, setDisplayInvalid] = useState(false);
 
   // Country Code
   const [PhoneNumber, setPhoneNumber] = useState("");
@@ -57,6 +63,44 @@ export default function Register() {
     }
   };
 
+  // Password Criteria
+  const PasswordRequirements = () => (
+    <div className="mb-4">
+      <PasswordCriteria
+        label="At least 12 characters"
+        isValid={password.length >= 12}
+      />
+      <PasswordCriteria
+        label="At least one lowercase letter"
+        isValid={/[a-z]/.test(password)}
+      />
+      <PasswordCriteria
+        label="At least one uppercase letter"
+        isValid={/[A-Z]/.test(password)}
+      />
+      <PasswordCriteria
+        label="At least one digit"
+        isValid={/\d/.test(password)}
+      />
+      <PasswordCriteria
+        label="At least one special character"
+        isValid={/[!@#$%^&*(),_.?":{}|<>]/.test(password)}
+      />
+    </div>
+  );
+
+  useEffect(() => {
+    // Check password criteria and update isPasswordValid state
+    const isPasswordCriteriaMet =
+      password.length >= 12 &&
+      /[a-z]/.test(password) &&
+      /[A-Z]/.test(password) &&
+      /\d/.test(password) &&
+      /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    setIsPasswordValid(isPasswordCriteriaMet);
+  }, [password]);
+
   // Genrate Password
   function handleGeneratePassword() {
     const generatedPassword = generatePassword(12); // Change 10 to your desired password length
@@ -83,7 +127,12 @@ export default function Register() {
 
   // Temp Email Detection
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDisplayInvalid(false);
     setEmail(event.target.value);
+  };
+
+  const handleEmailFocus = () => {
+    setDisplayInvalid(false);
   };
 
   const handleEmailBlur = async () => {
@@ -105,7 +154,9 @@ export default function Register() {
       console.log("Is temp email:", isTemp);
 
       if (!isValidFormat) {
-        console.log("Invalid email format!");
+        setTimeout(() => {
+          setDisplayInvalid(true);
+        }, 1200);
       }
 
       // You can directly show a message for temporary emails here
@@ -167,40 +218,45 @@ export default function Register() {
             <div className="flex flex-col w-[40%]">
               <label>Email</label>
               <input
-                className={`border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md 
+                className={`border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)] 
                 }`}
                 type="email"
                 required
                 onChange={handleEmailChange}
+                onFocus={handleEmailFocus}
                 onBlur={handleEmailBlur}
               />
               {isTempEmail ? (
-                <p className="text-red-500 py-1">Disposable Email Detected!</p>
+                <p className="text-red-500 p-1">Disposable Email Detected!</p>
               ) : null}
-              {email && !isValidEmail ? (
-                <p className="text-red-500 py-1">Invalid Email Format!</p>
+              {email && !isValidEmail && DisplayInvalid ? (
+                <p className="text-red-500 p-1">Invalid Email Format!</p>
               ) : null}
             </div>
             <div className="flex flex-col w-[40%]">
               <label>Phone number</label>
               <PhoneInput
+                country={"us"}
                 value={PhoneNumber}
                 onChange={handlePhoneChange}
+                autoFormat={false}
                 inputStyle={{
                   border: "1px solid rgba(128, 128, 128, 0.31)",
                   borderRadius: "0.25rem",
                   padding: "0.268rem 2.7rem", // Adjust the percentage for responsiveness
                   width: "98%", // Make the input take full width
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.15)",
+                  boxShadow: "0 4px 4px rgba(0, 0, 0, 0.04)",
                 }}
               />
 
-              {!valid && (
-                <p className="text-red-500 py-1">
-                  {" "}
-                  Please enter valid phone number!
-                </p>
-              )}
+              {/*
+                {!valid && (
+                  <p className="text-red-500 py-1">
+                    {" "} 
+                    Please enter valid phone number!
+                  </p>
+                )}
+              */}
             </div>
           </div>
 
@@ -212,7 +268,7 @@ export default function Register() {
             <div className="flex flex-col py-2 w-full">
               <label>Company Name</label>
               <input
-                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
+                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                 type="text"
                 required
               />
@@ -221,7 +277,7 @@ export default function Register() {
             <div className="flex flex-col py-2 w-full">
               <label>Street Adrress</label>
               <input
-                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
+                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                 type="text"
                 required
               />
@@ -230,35 +286,35 @@ export default function Register() {
             <div className="flex flex-col py-2 w-full">
               <label>Street Address 2</label>
               <input
-                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
+                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                 type="text"
                 required
               />
             </div>
 
             <div className="flex justify-between">
-              <div className="flex flex-col py-2 w-[25%]">
+              <div className="flex flex-col py-2 w-[30%]">
                 <label>City</label>
                 <input
-                  className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
+                  className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                   type="text"
                   required
                 />
               </div>
 
-              <div className="flex flex-col py-2 w-[25%]">
+              <div className="flex flex-col py-2 w-[30%]">
                 <label>State</label>
                 <input
-                  className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
+                  className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                   type="text"
                   required
                 />
               </div>
 
-              <div className="flex flex-col py-2 w-[25%]">
+              <div className="flex flex-col py-2 w-[30%]">
                 <label>Postcode</label>
                 <input
-                  className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
+                  className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                   type="number"
                   required
                 />
@@ -268,7 +324,7 @@ export default function Register() {
             <div className="flex flex-col py-2 w-full">
               <label>Country</label>
               <input
-                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
+                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                 type="text"
                 required
               />
@@ -277,7 +333,7 @@ export default function Register() {
             <div className="flex flex-col py-2 w-full">
               <label>VAT Number (Optional)</label>
               <input
-                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
+                className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                 type="text"
               />
             </div>
@@ -294,17 +350,30 @@ export default function Register() {
             <div className="flex justify-between my-3">
               <div className="flex flex-col py-2 w-[40%]">
                 <label>Password</label>
-                <input
-                  className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
-                  type="text"
-                  value={password}
-                  onChange={handleChangePassword}
-                  required
-                />
+                <div className="relative">
+                  <input
+                    className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]  pr-10 w-full" // Add right padding to prevent text overlap
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={handleChangePassword}
+                    required
+                  />
+                  <i
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-2 flex items-center" // Align to the right
+                  >
+                    {showPassword ? (
+                      <AiOutlineEye size={22} color="gray" />
+                    ) : (
+                      <AiOutlineEyeInvisible size={22} color="gray" />
+                    )}
+                  </i>
+                </div>
                 <PasswordStrengthBar
                   password={password}
                   className="pr-2 pt-1 font-semibold"
                 />
+                <PasswordRequirements />
 
                 <button
                   type="button"
@@ -318,12 +387,15 @@ export default function Register() {
               <div className="flex flex-col py-2 w-[40%]">
                 <label>Confirm Password</label>
                 <input
-                  className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-md"
-                  type="text"
+                  className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
+                  type={showPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={handleChangeConfirmPassword}
                   required
                 />
+                {confirmPassword !== password && (
+                  <p className="text-red-500 py-1">Passwords do not match!</p>
+                )}
               </div>
             </div>
           </div>
@@ -339,9 +411,11 @@ export default function Register() {
 
             {/* Register Button */}
             <div className="flex float-right">
-              {!isCaptchaFilled ? (
+              {!isCaptchaFilled || !isPasswordValid ? (
                 <div
-                  onClick={() => alert("Please fill the CAPTCHA!")}
+                  onClick={() =>
+                    alert("Please fill the CAPTCHA and meet password criteria!")
+                  }
                   className="border-2 py-2 px-5 rounded-md bg-[#337AB7] text-white hover:bg-blue-600 duration-200 cursor-pointer"
                 >
                   Register
