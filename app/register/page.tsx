@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 import ReCAPTCHA from "react-google-recaptcha";
 
 import PhoneInput from "react-phone-input-2";
@@ -22,6 +24,7 @@ import Link from "next/link";
 
 import { validateEmail } from "@/utils/tempEmailDetect";
 import { PasswordCriteria } from "@/utils/passwordCriteria";
+import axios from "axios";
 
 export default function Register() {
   const [password, setPassword] = useState("");
@@ -40,6 +43,60 @@ export default function Register() {
   // Country Code
   const [PhoneNumber, setPhoneNumber] = useState("");
   const [valid, setValid] = useState(true);
+
+  // Backend Integratiom
+  const [Firstname, setFirstname] = useState("");
+  const [Lastname, setLastname] = useState("");
+  const [Company, setCompany] = useState("");
+  const [StreetAddress, setStreetAddress] = useState("");
+  const [StreetAddress2, setStreetAddress2] = useState("");
+  const [City, setCity] = useState("");
+  const [State, setState] = useState("");
+  const [Postcode, setPostcode] = useState("");
+  const [Country, setCountry] = useState("");
+  const [VatNumber, setVatNumber] = useState("");
+
+  const router = useRouter();
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, []);
+
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!isMounted) return;
+
+    try {
+      const apiBaseUrl = "http://172.16.100.242:8080";
+      const loginEndpoint = "/auth/login";
+
+      const response = await axios.post(apiBaseUrl + loginEndpoint, {
+        Firstname: Firstname,
+        Lastname: Lastname,
+        email: email,
+        PhoneNumber: PhoneNumber,
+        Company: Company,
+        StreetAddress: StreetAddress,
+        StreetAddress2: StreetAddress2,
+        City: City,
+        State: State,
+        Postcode: Postcode,
+        Country: Country,
+        VatNumber: VatNumber,
+        password: password,
+        confirmPassword: confirmPassword,
+      });
+
+      console.log(response.data);
+
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handlePhoneChange = (
     value: string,
@@ -197,7 +254,7 @@ export default function Register() {
           />
         </div>
       </div>
-      <div className="w-full">
+      <form className="w-full" onSubmit={handleRegister}>
         <div className="container mx-auto p-5 lg:p-20">
           <h1 className="text-3xl font-extrabold mb-8">
             Create an Account with Us
@@ -210,9 +267,19 @@ export default function Register() {
             </h2>
           </div>
           <div className="flex my-3 justify-between">
-            <InputField label="First Name" type="text" />
+            <InputField
+              label="First Name"
+              type="text"
+              value={Firstname}
+              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setFirstname(e.target.value)}
+            />
 
-            <InputField label="Last Name" type="text" />
+            <InputField
+              label="Last Name"
+              type="text"
+              value={Lastname}
+              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setLastname(e.target.value)}
+            />
           </div>
           <div className="flex justify-between pb-5">
             <div className="flex flex-col w-[40%]">
@@ -221,6 +288,7 @@ export default function Register() {
                 className={`border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)] 
                 }`}
                 type="email"
+                value={email}
                 required
                 onChange={handleEmailChange}
                 onFocus={handleEmailFocus}
@@ -433,7 +501,7 @@ export default function Register() {
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
