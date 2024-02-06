@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 import axios from "axios";
+import Cookies from "js-cookie";
+
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -28,13 +30,15 @@ export default function Login() {
     if (!isMounted) return;
 
     try {
-      const apiBaseUrl = "http://172.16.100.242:8080";
+      const apiBaseUrl = "https://631a-120-89-104-88.ngrok-free.app";
       const loginEndpoint = "/auth/login";
 
       const response = await axios.post(apiBaseUrl + loginEndpoint, {
         email: email,
         password: password,
       });
+
+      //const token = response.data.accessToken;
 
       console.log(response.data);
 
