@@ -60,32 +60,26 @@ export default function Register() {
 
   const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-    return () => setIsMounted(false);
-  }, []);
-
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isMounted) return;
 
     try {
       const apiBaseUrl = "http://172.16.100.242:8080";
-      const loginEndpoint = "/auth/login";
+      const RegEndpoint = "/auth/register";
 
-      const response = await axios.post(apiBaseUrl + loginEndpoint, {
-        Firstname: Firstname,
-        Lastname: Lastname,
+      const response = await axios.post(apiBaseUrl + RegEndpoint, {
+        firstName: Firstname,
+        lastName: Lastname,
         email: email,
-        PhoneNumber: PhoneNumber,
-        Company: Company,
-        StreetAddress: StreetAddress,
-        StreetAddress2: StreetAddress2,
-        City: City,
-        State: State,
-        Postcode: Postcode,
-        Country: Country,
-        VatNumber: VatNumber,
+        phone: PhoneNumber,
+        companyName: Company,
+        streetAddress: StreetAddress,
+        streetAddress2: StreetAddress2,
+        city: City,
+        state: State,
+        postcode: Postcode,
+        country: Country,
+        vatNumber: VatNumber,
         password: password,
         confirmPassword: confirmPassword,
       });
@@ -94,7 +88,9 @@ export default function Register() {
 
       router.push("/");
     } catch (error) {
-      console.log(error);
+      console.error("Error during registration:", error);
+
+      // Additional logging for debugging
     }
   };
 
@@ -220,6 +216,8 @@ export default function Register() {
       if (isTemp === true) {
         console.log("Temp Email detected!");
       }
+
+      setEmail;
     } catch (error) {
       console.error("Error during email validation:", error);
 
@@ -271,14 +269,18 @@ export default function Register() {
               label="First Name"
               type="text"
               value={Firstname}
-              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setFirstname(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setFirstname(e.target.value)
+              }
             />
 
             <InputField
               label="Last Name"
               type="text"
               value={Lastname}
-              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setLastname(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setLastname(e.target.value)
+              }
             />
           </div>
           <div className="flex justify-between pb-5">
@@ -338,6 +340,10 @@ export default function Register() {
               <input
                 className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                 type="text"
+                value={Company}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setCompany(e.target.value)
+                }
                 required
               />
             </div>
@@ -348,6 +354,10 @@ export default function Register() {
                 className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                 type="text"
                 required
+                value={StreetAddress}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setStreetAddress(e.target.value)
+                }
               />
             </div>
 
@@ -357,6 +367,10 @@ export default function Register() {
                 className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                 type="text"
                 required
+                value={StreetAddress2}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setStreetAddress2(e.target.value)
+                }
               />
             </div>
 
@@ -367,6 +381,10 @@ export default function Register() {
                   className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                   type="text"
                   required
+                  value={City}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setCity(e.target.value)
+                  }
                 />
               </div>
 
@@ -376,6 +394,10 @@ export default function Register() {
                   className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                   type="text"
                   required
+                  value={State}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setState(e.target.value)
+                  }
                 />
               </div>
 
@@ -385,6 +407,10 @@ export default function Register() {
                   className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                   type="number"
                   required
+                  value={Postcode}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setPostcode(e.target.value)
+                  }
                 />
               </div>
             </div>
@@ -395,6 +421,10 @@ export default function Register() {
                 className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                 type="text"
                 required
+                value={Country}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setCountry(e.target.value)
+                }
               />
             </div>
 
@@ -403,6 +433,10 @@ export default function Register() {
               <input
                 className="border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)]"
                 type="text"
+                value={VatNumber}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setVatNumber(e.target.value)
+                }
               />
             </div>
           </div>
@@ -489,14 +523,12 @@ export default function Register() {
                   Register
                 </div>
               ) : (
-                <Link href="/">
-                  <button
-                    type="submit"
-                    className="border-2 py-2 px-5 rounded-md bg-[#337AB7] text-white hover:bg-blue-600 duration-200"
-                  >
-                    Register
-                  </button>
-                </Link>
+                <button
+                  type="submit"
+                  className="border-2 py-2 px-5 rounded-md bg-[#337AB7] text-white hover:bg-blue-600 duration-200"
+                >
+                  Register
+                </button>
               )}
             </div>
           </div>
