@@ -30,7 +30,7 @@ export default function Login() {
     if (!isMounted) return;
 
     try {
-      const apiBaseUrl = "https://631a-120-89-104-88.ngrok-free.app";
+      const apiBaseUrl = "https://3e30-202-53-1-253.ngrok-free.app";
       const loginEndpoint = "/auth/login";
 
       const response = await axios.post(apiBaseUrl + loginEndpoint, {
@@ -38,13 +38,15 @@ export default function Login() {
         password: password,
       });
 
-      //const token = response.data.accessToken;
+      const accessToken = response.data.accessToken;
+
+      Cookies.set("accessToken", accessToken, { expires: 7 });
 
       console.log(response.data);
 
       router.push("/");
     } catch (error) {
-      console.log(error);
+      console.error("login error", error);
       setShowError(true);
     }
   };
