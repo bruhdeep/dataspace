@@ -30,7 +30,7 @@ export default function Login() {
     if (!isMounted) return;
 
     try {
-      const apiBaseUrl = "http://172.16.100.242:8080";
+      const apiBaseUrl = "http://172.16.100.246:8080";
       const loginEndpoint = "/auth/login";
 
       const response = await axios.post(apiBaseUrl + loginEndpoint, {
@@ -41,8 +41,6 @@ export default function Login() {
       const accessToken = response.data.accessToken;
 
       Cookies.set("accessToken", accessToken, { expires: 7 });
-
-      console.log(response.data);
 
       router.push("/");
     } catch (error) {

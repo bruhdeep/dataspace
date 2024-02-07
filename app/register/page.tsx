@@ -55,10 +55,9 @@ export default function Register() {
   const [Postcode, setPostcode] = useState("");
   const [Country, setCountry] = useState("");
   const [VatNumber, setVatNumber] = useState("");
+  const [countryCode, setCountryCode] = useState("");
 
   const router = useRouter();
-
-  const [isMounted, setIsMounted] = useState(false);
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,6 +70,7 @@ export default function Register() {
         firstName: Firstname,
         lastName: Lastname,
         email: email,
+        countryTeleCode: countryCode,
         phone: PhoneNumber,
         companyName: Company,
         streetAddress: StreetAddress,
@@ -103,12 +103,18 @@ export default function Register() {
     // Format the phone number as the user types
     const phoneNumber = new AsYouType(country).input(value);
 
-    // Parse the phone number
-    const parsedPhoneNumber = parsePhoneNumberFromString(phoneNumber, country);
+    // Access the country code directly from the country state
+    const countryCode = country ? `+${country.dialCode}` : "";
+
+    // Log values for debugging
+    console.log("Country state:", country);
+    console.log("Extracted country code:", countryCode);
+    console.log("Phone number:", phoneNumber);
 
     // Check if the phone number is valid
-    if (parsedPhoneNumber?.isValid()) {
+    if (phoneNumber) {
       setPhoneNumber(phoneNumber);
+      setCountryCode(countryCode);
       setValid(true);
     } else {
       setValid(false);
