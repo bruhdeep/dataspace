@@ -64,7 +64,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const apiBaseUrl = "https://3e30-202-53-1-253.ngrok-free.app";
+      const apiBaseUrl = "http://172.16.100.242:8080";
       const RegEndpoint = "/auth/register";
 
       const response = await axios.post(apiBaseUrl + RegEndpoint, {
@@ -137,7 +137,7 @@ export default function Register() {
       />
       <PasswordCriteria
         label="At least one special character"
-        isValid={/[!@#$%^&*(),_.?":{}|<>]/.test(password)}
+        isValid={/[!@#$%^&*(),.?":{}|<>]/.test(password)}
       />
     </div>
   );

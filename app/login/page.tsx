@@ -30,7 +30,7 @@ export default function Login() {
     if (!isMounted) return;
 
     try {
-      const apiBaseUrl = "https://3e30-202-53-1-253.ngrok-free.app";
+      const apiBaseUrl = "http://172.16.100.242:8080";
       const loginEndpoint = "/auth/login";
 
       const response = await axios.post(apiBaseUrl + loginEndpoint, {
