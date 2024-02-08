@@ -56,6 +56,7 @@ export default function Register() {
   const [Country, setCountry] = useState("");
   const [VatNumber, setVatNumber] = useState("");
   const [countryCode, setCountryCode] = useState("");
+  const [phoneWithoutCountryCode, setPhoneWithoutCountryCode] = useState("");
 
   const router = useRouter();
 
@@ -63,7 +64,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const apiBaseUrl = "http://172.16.100.242:8080";
+      const apiBaseUrl = "http://172.16.100.246:8080";
       const RegEndpoint = "/auth/register";
 
       const response = await axios.post(apiBaseUrl + RegEndpoint, {
@@ -71,7 +72,7 @@ export default function Register() {
         lastName: Lastname,
         email: email,
         countryTeleCode: countryCode,
-        phone: PhoneNumber,
+        phone: phoneWithoutCountryCode,
         companyName: Company,
         streetAddress: StreetAddress,
         streetAddress2: StreetAddress2,
@@ -104,24 +105,20 @@ export default function Register() {
     const phoneNumber = new AsYouType(country).input(value);
 
     // Access the country code directly from the country state
-    const countryCode = country ? `+${country.dialCode}` : "";
-
-    // Log values for debugging
-    console.log("Country state:", country);
-    console.log("Extracted country code:", countryCode);
-    console.log("Phone number:", phoneNumber);
+    const currentCountryCode = country ? `+${country.dialCode}` : "";
 
     // Check if the phone number is valid
     if (phoneNumber) {
-      setPhoneNumber(phoneNumber);
-      setCountryCode(countryCode);
+      setPhoneNumber(phoneNumber.substring(currentCountryCode.length));
+      setCountryCode(currentCountryCode);
       setValid(true);
     } else {
+      // If the user has entered the phone number without selecting the country code
+      setPhoneNumber(value);
       setValid(false);
       // handle invalid phone number
     }
   };
-
   // Password Criteria
   const PasswordRequirements = () => (
     <div className="mb-4">
@@ -294,7 +291,7 @@ export default function Register() {
               <label>Email</label>
               <input
                 className={`border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)] 
-                }`}
+                `}
                 type="email"
                 value={email}
                 required
@@ -309,21 +306,39 @@ export default function Register() {
                 <p className="text-red-500 p-1">Invalid Email Format!</p>
               ) : null}
             </div>
-            <div className="flex flex-col w-[40%]">
-              <label>Phone number</label>
-              <PhoneInput
-                country={"us"}
-                value={PhoneNumber}
-                onChange={handlePhoneChange}
-                autoFormat={false}
-                inputStyle={{
-                  border: "1px solid rgba(128, 128, 128, 0.31)",
-                  borderRadius: "0.25rem",
-                  padding: "0.268rem 2.7rem", // Adjust the percentage for responsiveness
-                  width: "98%", // Make the input take full width
-                  boxShadow: "0 4px 4px rgba(0, 0, 0, 0.04)",
-                }}
-              />
+            <div className="flex w-[40%]">
+              <div className="flex flex-col w-full">
+                <label>Phone number</label>
+                <div className="flex w-full justify-between">
+                  <div className="w-[10%]">
+                    <PhoneInput
+                      country={"us"}
+                      value={countryCode}
+                      onChange={handlePhoneChange}
+                      autoFormat={false}
+                      inputStyle={{
+                        border: "1px solid rgba(128, 128, 128, 0.31)",
+                        borderRadius: "0.25rem",
+                        padding: "0.268rem 1rem", // Adjust the percentage for responsiveness
+                        width: "20%", // Make the input take full width
+                        boxShadow: "0 4px 4px rgba(0, 0, 0, 0.04)",
+                      }}
+                    />
+                  </div>
+                  <div className="w-[85%]">
+                    <input
+                      className={
+                        "border border-gray-300 rounded px-2 py-1 mr-2 drop-shadow-[0_4px_3px_rgba(0,0,0,0.06)] w-[98%]"
+                      }
+                      type="tel"
+                      value={phoneWithoutCountryCode}
+                      onChange={(e) =>
+                        setPhoneWithoutCountryCode(e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
 
               {/*
                 {!valid && (

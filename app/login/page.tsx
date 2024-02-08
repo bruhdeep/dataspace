@@ -106,7 +106,7 @@ export default function Login() {
                 <div className="flex justify-between">
                   <div className="w-[50%]">
                     {showError && (
-                      <div className="text-red-500 ">
+                      <div className="text-red-500 py-2">
                         <p>Invalid email or password</p>
                       </div>
                     )}
