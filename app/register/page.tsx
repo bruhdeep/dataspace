@@ -194,16 +194,19 @@ export default function Register() {
   const handleEmailBlur = async () => {
     try {
       const { isTemp } = await validateEmail(email);
-      console.log("Email validation result:", { isTemp });
+
+      const { isValid } = await validateEmail(email);
+
+      console.log("Email validation result:", { isTemp, isValid });
 
       // Additional logging for debugging
-      console.log("Email validation API response:", { isTemp });
+      console.log("Email validation API response:", { isTemp, isValid });
 
       const isValidFormat = isValidEmailFormat(email);
 
       // Update state based on the result of email validation
       setIsTempEmail(typeof isTemp === "boolean" ? isTemp : isTemp === "true");
-      setIsValidEmail(isValidFormat);
+      setIsValidEmail(isValid && isValidFormat);
 
       // Log the validation results to the console
       console.log("Email format is valid:", isValidFormat);
@@ -525,6 +528,7 @@ export default function Register() {
 
           <div className="flex justify-between items-center gap-10">
             {/* ReCaptcha*/}
+
             <div>
               <ReCAPTCHA
                 sitekey="6LezkWApAAAAAApNYV2yCP-oq1-TZVzXDMKaglUN"
