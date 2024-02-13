@@ -11,7 +11,7 @@ import "react-phone-input-2/lib/style.css";
 
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
-import { parsePhoneNumberFromString, AsYouType } from "libphonenumber-js";
+import { AsYouType } from "libphonenumber-js";
 
 import InputField from "@/components/inputfield";
 
@@ -20,7 +20,7 @@ import {
   copyToClipboard,
 } from "../../utils/passwordGenerator";
 import PasswordStrengthBar from "react-password-strength-bar";
-import Link from "next/link";
+
 
 import { validateEmail } from "@/utils/tempEmailDetect";
 import { PasswordCriteria } from "@/utils/passwordCriteria";
