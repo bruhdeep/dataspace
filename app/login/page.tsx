@@ -112,7 +112,7 @@ export default function Login() {
                     )}
                   </div>
                   <div className="flex float-right">
-                    <Link href="/">
+                    <Link href="/forget">
                       <p className="text-[#6CA2F3] pt-2">Forgot Password?</p>
                     </Link>
                   </div>
