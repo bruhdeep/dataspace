@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Forget() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
 
   return (

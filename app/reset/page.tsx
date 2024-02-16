@@ -1,9 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Forget() {
+  const router = useRouter();
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -12,7 +14,7 @@ export default function Forget() {
       <div className="w-full max-w-[90%] md:max-w-[60%] lg:max-w-[40%] xl:max-w-[30%] h-auto md:h-[80%] my-9 rounded-xl bg-white bg-opacity-75">
         <div className="w-[90%] md:w-[80%] lg:w-[90%] mx-auto h-full px-14 py-8 flex flex-col justify-between">
           <div className="flex justify-center m-3 w-auto h-[10%] pb-5">
-            <h1 className="text-3xl font-semibold">Create a fresh password</h1>
+            <h1 className="text-3xl font-semibold">Create a new password</h1>
           </div>
           <div className="flex m-2 w-auto py-2">
             <form className="w-full">

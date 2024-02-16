@@ -7,7 +7,7 @@ interface RapidApiResponse {
 
 interface EmailValidationResponse {
   isValid: boolean;
-  isTemp: boolean; // Renamed from isDisposable to isTemp
+  isTemp: boolean; 
 }
 
 export const validateEmail = async (
