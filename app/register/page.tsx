@@ -21,7 +21,6 @@ import {
 } from "../../utils/passwordGenerator";
 import PasswordStrengthBar from "react-password-strength-bar";
 
-
 import { validateEmail } from "@/utils/tempEmailDetect";
 import { PasswordCriteria } from "@/utils/passwordCriteria";
 import axios from "axios";
@@ -64,7 +63,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const apiBaseUrl = "http://172.16.100.246:8080";
+      const apiBaseUrl = "http://172.16.100.116:8080";
       const RegEndpoint = "/auth/register";
 
       const response = await axios.post(apiBaseUrl + RegEndpoint, {
@@ -119,7 +118,7 @@ export default function Register() {
       // handle invalid phone number
     }
   };
-  // Password Criteria
+  // Password Criteriae
   const PasswordRequirements = () => (
     <div className="mb-4">
       <PasswordCriteria

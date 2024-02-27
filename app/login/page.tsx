@@ -13,10 +13,10 @@ import { useRouter } from "next/navigation";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
-  const [email, setEmail] = useState(""); 
+  const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
-  
+
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -32,7 +32,7 @@ export default function Login() {
     if (!isMounted) return;
 
     try {
-      const apiBaseUrl = "http://172.16.100.246:8080";
+      const apiBaseUrl = "http://172.16.100.116:8080";
       const loginEndpoint = "/auth/login";
 
       const response = await axios.post(apiBaseUrl + loginEndpoint, {
